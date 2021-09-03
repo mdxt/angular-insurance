@@ -28,4 +28,7 @@ export class RequestPolicyList {
 	incomeRange: IncomeRangeEnum;
 	occupationType: OccupationTypeEnum;
 	qualificationLevel: QualificationLevelEnum;
+	coverValue: number;
+	coverTillAge: number;
+	payMonthly: boolean;
 }
