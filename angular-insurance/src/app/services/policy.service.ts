@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { Policy } from '../common/policy';
-import { GenderEnum, IncomeRangeEnum, OccupationTypeEnum, QualificationLevelEnum, RequestPolicyList } from '../common/request-policy-list';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Policy, PolicyAndCost } from '../common/policy';
+import { GenderEnum, IncomeRangeEnum, OccupationTypeEnum, PaymentPeriodEnum, QualificationLevelEnum, RequestPolicyList } from '../common/request-policy-list';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,10 @@ export class PolicyService {
   requestPolicyList: Subject<RequestPolicyList> = new BehaviorSubject<RequestPolicyList>(null);
 
   constructor(private httpClient: HttpClient) { 
+    //this.createRequestForPolicies();
+  }
 
+  createRequestForPolicies(){
     let tempRequest: RequestPolicyList = new RequestPolicyList();
     tempRequest.gender = GenderEnum.MALE;
     tempRequest.age = 23;
@@ -22,20 +26,23 @@ export class PolicyService {
     tempRequest.tobaccoUser = false;    
     tempRequest.coverValue = 3500000;
     tempRequest.coverTillAge = 60;
-    tempRequest.payMonthly = true;
-
-
-    this.httpClient.post<Policy[]>("http://localhost:8080/api/public/policies", tempRequest).subscribe(
-      response => {
-        console.log('obtained response from policies get request- '+JSON.stringify(response));
-      },
-      error => {
-        console.log('obtained error from policies get request- '+error);
-      }
-
-    )
+    tempRequest.paymentPeriod = PaymentPeriodEnum.MONTHLY;
+    this.requestPolicyList.next(tempRequest);
   }
 
+  getPolicies(request: RequestPolicyList): Observable<PolicyAndCost[]>{
+    console.log("attempting get policies with request: "+request);
+    return this.httpClient.post<PolicyAndCost[]>(environment.apiUrl+"/public/policies", request);
+  }
+
+  getPolicyDetails(id: number): Observable<Policy>{
+    return this.httpClient.get<Policy>(environment.apiUrl+"/public/policy/"+id);
+  }
+
+  getPolicyDetailsWithCost(id: number, request: RequestPolicyList): Observable<PolicyAndCost>{
+    console.log("attempting post policy with cost with request: "+request);
+    return this.httpClient.post<PolicyAndCost>(environment.apiUrl+"/public/policy/"+id, request);
+  }  
 }
 
 // [

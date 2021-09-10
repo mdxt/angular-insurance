@@ -21,6 +21,12 @@ export enum QualificationLevelEnum {
 	COLLEGE_GRADUATE_AND_ABOVE
 }
 
+export enum PaymentPeriodEnum {
+	MONTHLY,
+	YEARLY,
+	ONE_TIME
+}
+
 export class RequestPolicyList {
     gender: GenderEnum;
 	age: number;
@@ -30,5 +36,5 @@ export class RequestPolicyList {
 	qualificationLevel: QualificationLevelEnum;
 	coverValue: number;
 	coverTillAge: number;
-	payMonthly: boolean;
+	paymentPeriod: PaymentPeriodEnum;
 }

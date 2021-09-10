@@ -1,0 +1,18 @@
+
+<div *ngIf="policy">
+    {{ policy.policy.name }}
+    <div *ngIf="policy.totalCost > 0.0">
+        {{ policy.totalCost }}
+    </div>
+    <div *ngIf="policy.totalCost <= 0.0">
+        Policy not available for given params
+    </div>
+    <pdf-viewer 
+    [src]="apiUrl + policy.policy.documentPath" [render-text]="true"
+    [show-all]="false"
+    style="display: block;"
+    ></pdf-viewer>
+</div>
+<div *ngIf="policy == null">
+    No such policy found
+</div>

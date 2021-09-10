@@ -1,0 +1,94 @@
+<div class="container-fluid">
+    <form [formGroup]="requestPoliciesFormGroup" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select class="w-100" id="gender" formControlName="gender">
+                <option *ngFor="let gender of genders">
+                    {{ gender }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input class="w-100" id="age" formControlName="age" type="number" min="18" max="99">
+            <div *ngIf="age.invalid && (age.dirty || age.touched)" class="alert alert-danger">
+                <div *ngIf="age.errors.required || age.errors.notOnlyWhitespace">
+                    Age is required
+                </div>
+
+                <div *ngIf="age.errors.min">
+                    Min age of 18
+                </div>
+                <div *ngIf="age.errors.max">
+                    Max age of 99
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tobaccoUser">Tobacco user:</label>
+            <input id="tobaccoUser" formControlName="tobaccoUser" type="checkbox">
+        </div>
+
+        <div class="form-group">
+            <label for="incomeRange">Income range:</label>
+            <select class="w-100" id="incomeRange" formControlName="incomeRange">
+                <option *ngFor="let incomeRange of incomeRanges">
+                    {{ formatEnumForOutput(incomeRange) }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="occupationType">Occupation Type:</label>
+            <select class="w-100" id="occupationType" formControlName="occupationType">
+                <option *ngFor="let occupationType of occupationTypes">
+                    {{ formatEnumForOutput(occupationType) }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="qualificationLevel">Qualification Level:</label>
+            <select class="w-100" id="qualificationLevel" formControlName="qualificationLevel">
+                <option *ngFor="let qualificationLevel of qualificationLevels">
+                    {{ formatEnumForOutput(qualificationLevel) }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="coverValue">Cover value: {{ coverValue.value | currency:'INR':'symbol':'1.0-0'}}</label>
+            <input #coverValue class="w-100" id="coverValue" formControlName="coverValue" type="range" min="50000" max="20000000">
+        </div>
+
+        <div class="form-group">
+            <label for="coverTillAge">Cover till age:</label>
+            <input class="w-100" id="coverTillAge" formControlName="coverTillAge" type="number" min="18" max="99">
+            <!-- <div *ngIf="coverTillAge.invalid && (coverTillAge.dirty || coverTillAge.touched)" class="alert alert-danger">
+                <div *ngIf="coverTillAge.errors.required || coverTillAge.errors.notOnlyWhitespace">
+                    Cover till age is required
+                </div>
+
+                <div *ngIf="coverTillAge.errors.min">
+                    Min age of current
+                </div>
+                <div *ngIf="coverTillAge.errors.max">
+                    Max age of 99
+                </div>
+            </div> -->
+        </div>
+
+        <div class="form-group">
+            <label for="paymentPeriod">Payment periods:</label>
+            <select class="w-100" id="paymentPeriod" formControlName="paymentPeriod">
+                <option *ngFor="let paymentPeriod of paymentPeriods">
+                    {{ formatEnumForOutput(paymentPeriod) }}
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" [disabled]="this.requestPoliciesFormGroup.invalid" class="btn btn-primary w-100">Submit</button>
+    </form>
+</div>

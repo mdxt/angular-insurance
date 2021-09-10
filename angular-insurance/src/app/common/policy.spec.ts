@@ -1,7 +1,7 @@
-import { Policy } from './policy';
+import { PolicyAndCost } from './policy';
 
 describe('Policy', () => {
   it('should create an instance', () => {
-    expect(new Policy()).toBeTruthy();
+    expect(new PolicyAndCost()).toBeTruthy();
   });
 });
