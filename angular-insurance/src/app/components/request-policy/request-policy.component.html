@@ -1,94 +1,196 @@
 <div class="container-fluid">
     <form [formGroup]="requestPoliciesFormGroup" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <label for="gender">Gender:</label>
-            <select class="w-100" id="gender" formControlName="gender">
-                <option *ngFor="let gender of genders">
-                    {{ gender }}
+            <label for="policyType">Policy type:</label>
+            <select #policyType class="form-control" id="policyType" formControlName="policyType">
+                <option *ngFor="let policyType of policyTypes" value="{{ policyType }}">
+                    {{ formatEnumForOutput(policyType) | titlecase}}
                 </option>
             </select>
         </div>
+        <div *ngIf="requestPoliciesFormGroup.get('policyType').value == 'LIFE'">
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" formControlName="gender">
+                    <option *ngFor="let gender of genders">
+                        {{ gender }}
+                    </option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="age">Age:</label>
-            <input class="w-100" id="age" formControlName="age" type="number" min="18" max="99">
-            <div *ngIf="age.invalid && (age.dirty || age.touched)" class="alert alert-danger">
-                <div *ngIf="age.errors.required || age.errors.notOnlyWhitespace">
-                    Age is required
-                </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input class="form-control" id="age" formControlName="age" type="number" min="18" max="99">
+                <div *ngIf="age.invalid && (age.dirty || age.touched)" class="alert alert-danger">
+                    <div *ngIf="age.errors.required || age.errors.notOnlyWhitespace">
+                        Age is required
+                    </div>
 
-                <div *ngIf="age.errors.min">
-                    Min age of 18
+                    <div *ngIf="age.errors.min">
+                        Min age of 18
+                    </div>
+                    <div *ngIf="age.errors.max">
+                        Max age of 99
+                    </div>
                 </div>
-                <div *ngIf="age.errors.max">
-                    Max age of 99
-                </div>
+            </div>
+
+            <div class="form-check">
+                
+                <input class="form-check-input" id="tobaccoUser" formControlName="tobaccoUser" type="checkbox">
+                <label class="form-check-label" for="tobaccoUser">Tobacco user</label>
+            </div>
+
+            <div class="form-group">
+                <label for="incomeRange">Income range:</label>
+                <select class="form-control" id="incomeRange" formControlName="incomeRange">
+                    <option *ngFor="let incomeRange of incomeRanges">
+                        {{ formatEnumForOutput(incomeRange) }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="occupationType">Occupation Type:</label>
+                <select class="form-control" id="occupationType" formControlName="occupationType">
+                    <option *ngFor="let occupationType of occupationTypes">
+                        {{ formatEnumForOutput(occupationType) }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="qualificationLevel">Qualification Level:</label>
+                <select class="form-control" id="qualificationLevel" formControlName="qualificationLevel">
+                    <option *ngFor="let qualificationLevel of qualificationLevels">
+                        {{ formatEnumForOutput(qualificationLevel) }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="coverValue">Cover value: {{ coverValue.value | currency:'INR':'symbol':'1.0-0'}}</label>
+                <input #coverValue class="form-control" id="coverValue" formControlName="coverValue" type="range" min="50000" max="20000000">
+            </div>
+
+            <div class="form-group">
+                <label for="coverTillAge">Cover till age:</label>
+                <input class="form-control" id="coverTillAge" formControlName="coverTillAge" type="number" min="18" max="99">
+                <!-- <div *ngIf="coverTillAge.invalid && (coverTillAge.dirty || coverTillAge.touched)" class="alert alert-danger">
+                    <div *ngIf="coverTillAge.errors.required || coverTillAge.errors.notOnlyWhitespace">
+                        Cover till age is required
+                    </div>
+
+                    <div *ngIf="coverTillAge.errors.min">
+                        Min age of current
+                    </div>
+                    <div *ngIf="coverTillAge.errors.max">
+                        Max age of 99
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="form-group">
+                <label for="paymentPeriod">Payment periods:</label>
+                <select class="form-control" id="paymentPeriod" formControlName="paymentPeriod">
+                    <option *ngFor="let paymentPeriod of paymentPeriods">
+                        {{ formatEnumForOutput(paymentPeriod) }}
+                    </option>
+                </select>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="tobaccoUser">Tobacco user:</label>
-            <input id="tobaccoUser" formControlName="tobaccoUser" type="checkbox">
-        </div>
+        <div *ngIf="currentPolicyType == 'DENTAL'">
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" formControlName="gender">
+                    <option *ngFor="let gender of genders">
+                        {{ gender }}
+                    </option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="incomeRange">Income range:</label>
-            <select class="w-100" id="incomeRange" formControlName="incomeRange">
-                <option *ngFor="let incomeRange of incomeRanges">
-                    {{ formatEnumForOutput(incomeRange) }}
-                </option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input class="form-control" id="age" formControlName="age" type="number" min="18" max="99">
+                <div *ngIf="age.invalid && (age.dirty || age.touched)" class="alert alert-danger">
+                    <div *ngIf="age.errors.required || age.errors.notOnlyWhitespace">
+                        Age is required
+                    </div>
 
-        <div class="form-group">
-            <label for="occupationType">Occupation Type:</label>
-            <select class="w-100" id="occupationType" formControlName="occupationType">
-                <option *ngFor="let occupationType of occupationTypes">
-                    {{ formatEnumForOutput(occupationType) }}
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="qualificationLevel">Qualification Level:</label>
-            <select class="w-100" id="qualificationLevel" formControlName="qualificationLevel">
-                <option *ngFor="let qualificationLevel of qualificationLevels">
-                    {{ formatEnumForOutput(qualificationLevel) }}
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="coverValue">Cover value: {{ coverValue.value | currency:'INR':'symbol':'1.0-0'}}</label>
-            <input #coverValue class="w-100" id="coverValue" formControlName="coverValue" type="range" min="50000" max="20000000">
-        </div>
-
-        <div class="form-group">
-            <label for="coverTillAge">Cover till age:</label>
-            <input class="w-100" id="coverTillAge" formControlName="coverTillAge" type="number" min="18" max="99">
-            <!-- <div *ngIf="coverTillAge.invalid && (coverTillAge.dirty || coverTillAge.touched)" class="alert alert-danger">
-                <div *ngIf="coverTillAge.errors.required || coverTillAge.errors.notOnlyWhitespace">
-                    Cover till age is required
+                    <div *ngIf="age.errors.min">
+                        Min age of 18
+                    </div>
+                    <div *ngIf="age.errors.max">
+                        Max age of 99
+                    </div>
                 </div>
+            </div>
 
-                <div *ngIf="coverTillAge.errors.min">
-                    Min age of current
+            <div class="form-group">
+                <label for="zipCode">Zip code:</label>
+                <input class="form-control" id="zipCode" formControlName="zipCode" type="text">
+                <div *ngIf="zipCode?.invalid && (zipCode?.dirty || zipCode?.touched)" class="alert alert-danger">
+                    Invalid zip code
                 </div>
-                <div *ngIf="coverTillAge.errors.max">
-                    Max age of 99
+            </div>
+
+            <div class="form-group">
+                <label for="numberCovered">Number of people covered:</label>
+                <input class="form-control" id="numberCovered" formControlName="numberCovered" type="number" min="1" max="5">
+                <div *ngIf="numberCovered?.invalid && (numberCovered?.dirty || numberCovered?.touched)" class="alert alert-danger">
+                    <div *ngIf="numberCovered.errors.required || numberCovered.errors.notOnlyWhitespace">
+                        Age is required
+                    </div>
+                    <div *ngIf="numberCovered.errors.min">
+                        Min 1 person covered
+                    </div>
+                    <div *ngIf="numberCovered.errors.max">
+                        Max 5 people covered
+                    </div>
                 </div>
+            </div>
+
+            <!-- <div class="form-group">
+                <label for="coverValue">Cover value: {{ coverValue.value | currency:'INR':'symbol':'1.0-0'}}</label>
+                <input #coverValue class="form-control" id="coverValue" formControlName="coverValue" type="range" min="50000" max="20000000">
             </div> -->
+            <div class="form-group">
+                <label for="coverValue">Cover value:</label>
+                <select class="form-control" id="coverValue" formControlName="coverValue">
+                    <option *ngFor="let coverValue of coverValues" value="{{ CoverValueEnum[coverValue] }}">
+                        {{ formatEnumForOutput(coverValue) }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="coverTillAge">Cover till age:</label>
+                <input class="form-control" id="coverTillAge" formControlName="coverTillAge" type="number" min="18" max="99">
+                <!-- <div *ngIf="coverTillAge.invalid && (coverTillAge.dirty || coverTillAge.touched)" class="alert alert-danger">
+                    <div *ngIf="coverTillAge.errors.required || coverTillAge.errors.notOnlyWhitespace">
+                        Cover till age is required
+                    </div>
+
+                    <div *ngIf="coverTillAge.errors.min">
+                        Min age of current
+                    </div>
+                    <div *ngIf="coverTillAge.errors.max">
+                        Max age of 99
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="form-group">
+                <label for="paymentPeriod">Payment periods:</label>
+                <select class="form-control" id="paymentPeriod" formControlName="paymentPeriod">
+                    <option *ngFor="let paymentPeriod of paymentPeriods">
+                        {{ formatEnumForOutput(paymentPeriod) }}
+                    </option>
+                </select>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="paymentPeriod">Payment periods:</label>
-            <select class="w-100" id="paymentPeriod" formControlName="paymentPeriod">
-                <option *ngFor="let paymentPeriod of paymentPeriods">
-                    {{ formatEnumForOutput(paymentPeriod) }}
-                </option>
-            </select>
-        </div>
-
-        <button type="submit" [disabled]="this.requestPoliciesFormGroup.invalid" class="btn btn-primary w-100">Submit</button>
+        <button type="submit" [disabled]="this.requestPoliciesFormGroup.invalid" class="btn btn-primary form-control">Submit</button>
     </form>
 </div>

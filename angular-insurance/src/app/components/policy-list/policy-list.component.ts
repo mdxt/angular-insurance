@@ -1,4 +1,6 @@
+
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PolicyAndCost } from 'src/app/common/policy';
 import { PolicyService } from 'src/app/services/policy.service';
@@ -11,15 +13,18 @@ import { RequestPolicyComponent } from '../request-policy/request-policy.compone
 })
 export class PolicyListComponent implements OnInit {
 
-  policies: PolicyAndCost[] = [];
+  policies: any[] = [];
+  policyType: string;
 
-  constructor(private policyService: PolicyService) { }
+  constructor(private policyService: PolicyService,
+              private router: Router) { }
 
   ngOnInit() {
     this.policyService.requestPolicyList.subscribe(
       request => this.policyService.getPolicies(request).subscribe(
           response => {
             this.policies = response;
+            this.policyType = request['policyType'];
             console.log('obtained response from policies get request- '+JSON.stringify(response));
           },
           error => {
@@ -28,6 +33,10 @@ export class PolicyListComponent implements OnInit {
           }
       )
     );
+  }
+
+  showPolicyDetails(id: number){
+    this.router.navigateByUrl('/policy/'+this.policyType+'/'+id);
   }
 
 }

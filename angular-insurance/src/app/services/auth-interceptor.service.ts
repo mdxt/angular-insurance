@@ -29,7 +29,7 @@ export class AuthInterceptorService implements HttpInterceptor{
 
           if(user === null){
             console.log('unauthenticated user attempting to access protected endpoint');
-            resolve(next.handle(request).toPromise());
+            return resolve(next.handle(request).toPromise());
           }
           
           const accessToken = user.authToken;

@@ -1,3 +1,9 @@
+export enum PolicyTypesEnum {
+	LIFE,
+	DENTAL,
+	DENTAL_AND_VISION
+}
+
 export enum GenderEnum {
 	MALE,
 	FEMALE,
@@ -27,14 +33,9 @@ export enum PaymentPeriodEnum {
 	ONE_TIME
 }
 
-export class RequestPolicyList {
-    gender: GenderEnum;
-	age: number;
-	tobaccoUser: boolean;
-	incomeRange: IncomeRangeEnum;
-	occupationType: OccupationTypeEnum;
-	qualificationLevel: QualificationLevelEnum;
-	coverValue: number;
-	coverTillAge: number;
-	paymentPeriod: PaymentPeriodEnum;
+export enum CoverValueEnum {
+	FIVE_LAKH = 500000,
+	TEN_LAKH = 1000000,
+	TWENTY_LAKH = 2000000,
+	FIFTY_LAKH = 5000000
 }

@@ -1,0 +1,22 @@
+<div *ngIf="requestPolicyList && id && cost; else errorTemplate">
+    <div *ngFor="let attribute of requestPolicyList | keyvalue">
+        {{ attribute.key }} - {{ attribute.value }}
+    </div>
+    ID- {{ id }}
+    Cost- {{ cost }}
+
+    <form [formGroup]="additionalDetailsFormGroup" (ngSubmit)="submitPurchase()">
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input #address class="form-control" id="address" formControlName="address" type="text">
+        </div>
+        <div class="form-group">
+            <label for="buyerName">Buyer Name:</label>
+            <input #address class="form-control" id="buyerName" formControlName="buyerName" type="text">
+        </div>
+        <button type="submit" [disabled]="this.additionalDetailsFormGroup.invalid" class="btn btn-primary">Purchase</button>
+    </form>
+</div>
+<ng-template #errorTemplate>
+    Please select a policy
+</ng-template>

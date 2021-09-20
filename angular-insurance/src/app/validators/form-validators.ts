@@ -1,6 +1,8 @@
+import { HttpClient } from "@angular/common/http";
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 export class FormValidators {
+ 
     static notOnlyWhitespace(control: FormControl) : ValidationErrors {
         if(control.value != null && control.value.trim().length ===0){
         return { 'notOnlyWhitespace': true };
@@ -19,4 +21,5 @@ export class FormValidators {
             return null;
         };
     }
+   
 }

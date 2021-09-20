@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { User } from './common/user';
+import { AuthService } from './services/authservice.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-insurance';
+  user: User;
+
+  constructor(private authService: AuthService){
+    authService.user.subscribe(user => this.user = user);
+  }
 }

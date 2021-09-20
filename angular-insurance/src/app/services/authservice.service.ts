@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, observable, Observable, Subject } from 'rxjs';
 import { User } from '../common/user';
 import jwt_decode from 'jwt-decode'; 
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -101,6 +102,10 @@ export class AuthService {
       localStorage.setItem('user', JSON.stringify(user));
     }
     this.user.next(user);
+  }
+
+  checkAccess(accessLevel: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(environment.apiUrl + '/'+accessLevel+'/checkAccess');
   }
 
   temp(){

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Policy, PolicyAndCost } from 'src/app/common/policy';
 import { PolicyService } from 'src/app/services/policy.service';
 import { environment } from 'src/environments/environment';
@@ -10,12 +10,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./policy-details.component.css']
 })
 export class PolicyDetailsComponent implements OnInit {
+  requestPolicyList: any;
 
   policy: PolicyAndCost;
 
   apiUrl: string = environment.apiUrl;
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private policyService: PolicyService) { }
 
   ngOnInit() {
@@ -31,7 +33,8 @@ export class PolicyDetailsComponent implements OnInit {
 
     this.policyService.requestPolicyList.subscribe(
       request => { 
-        
+          console.log('requestPolicyList - '+JSON.stringify(request));
+          this.requestPolicyList = request;
           this.policyService.getPolicyDetailsWithCost(policyId, request).subscribe(
             response => {
               this.policy = response;
@@ -44,6 +47,12 @@ export class PolicyDetailsComponent implements OnInit {
           ) 
       }
     );
+  }
+
+  purchase() {
+    this.policyService.setCurrentPolicyIdAndCost(this.policy.policy.id,this.policy.totalCost);
+    this.router.navigateByUrl('/purchase');
+    
   }
 
 }

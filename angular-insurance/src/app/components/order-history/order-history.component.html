@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+      <button class="nav-link active" data-toggle="tab" (click)="getPurchaseData('LIFE')">Life Insurance</button>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab">Menu 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab">Menu 2</a>
+    </li>
+  </ul>
+<div *ngIf="data">
+  <div *ngFor="let purchase of data">
+    {{ purchase | json }}
+  </div>
+    
+</div>

@@ -2,7 +2,8 @@
 <div *ngIf="policy">
     {{ policy.policy.name }}
     <div *ngIf="policy.totalCost > 0.0">
-        {{ policy.totalCost }}
+        <button type="button" class="btn btn-primary" (click)="purchase()">{{ policy.totalCost }}</button>
+        
     </div>
     <div *ngIf="policy.totalCost <= 0.0">
         Policy not available for given params

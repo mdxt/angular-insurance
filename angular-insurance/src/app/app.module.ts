@@ -11,6 +11,8 @@ import { PolicyListComponent } from './components/policy-list/policy-list.compon
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { RequestPolicyComponent } from './components/request-policy/request-policy.component';
+import { CreatePurchaseComponent } from './components/create-purchase/create-purchase.component';
+import { OrderHistoryComponent } from './components/order-history/order-history.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { RequestPolicyComponent } from './components/request-policy/request-poli
     LoginComponent,
     PolicyListComponent,
     PolicyDetailsComponent,
-    RequestPolicyComponent
+    RequestPolicyComponent,
+    CreatePurchaseComponent,
+    OrderHistoryComponent
   ],
   imports: [
     BrowserModule,

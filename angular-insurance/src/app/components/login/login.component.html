@@ -20,3 +20,37 @@
                 (click)="tryAdmin()">tryAdmin</button>
     </div>
 </form>
+
+<form [formGroup]="requestForm" *ngIf="requestForm">
+    <div class="form-group">
+        <label for="policyType">Policy type:</label>
+        <select id="policyType" formControlName="policyType" class="form-control">
+            <option *ngFor="let policyType of policyTypes" value="{{ policyType }}">{{ formatEnumForOutput(policyType) }}</option>
+        </select>
+    </div>
+    <div>
+        <div *ngFor="let data of formData | keyvalue">
+            <div class="form-group" >
+                <label for="data.value['name']">{{ data.value['name'] | titlecase}}:</label>
+
+                <!-- when select type -->
+                <div *ngIf="data.value['controlType'] == 'select'">
+                    <select id="{{ data.value['name'] }}" formControlName="{{ data.value['name'] }}" class="form-control"> 
+                        <option *ngFor="let option of data.value['permittedValues']" value="{{ option }}">{{ option }}</option>
+                    </select>
+                </div>
+
+                <!-- when input type -->
+                <div *ngIf="data.value['controlType'] == 'input'">
+                    <!-- when number type -->
+                    <div *ngIf="data.value['dataType'] == 'number'">
+                        <input id="{{ data.value['name'] }}" formControlName="{{ data.value['name'] }}" type="number" min="{{ +data.value['min'] }}" max="{{ +data.value['max'] }}" class="form-control">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</form>

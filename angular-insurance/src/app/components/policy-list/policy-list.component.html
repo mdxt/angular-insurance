@@ -3,9 +3,9 @@
 </div>
 
 <div *ngFor="let policy of policies">
-    <p>name: {{ policy.policy.name }}</p>
-    <p>cost: {{ policy.totalCost }}</p>
-    <a routerLink="/policy/{{ policy.policy.id }}">Details</a>
+    <p>name: {{ policy.name }}</p>
+    <p>cost: {{ policy.cost }}</p>
+    <button class="btn btn-primary" (click)="showPolicyDetails(policy.id)">Details</button>
     <br><br>
 </div>
 
