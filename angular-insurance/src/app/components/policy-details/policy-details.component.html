@@ -1,18 +1,98 @@
 
-<div *ngIf="policy">
-    {{ policy.policy.name }}
-    <div *ngIf="policy.totalCost > 0.0">
-        <button type="button" class="btn btn-primary" (click)="purchase()">{{ policy.totalCost }}</button>
+<div *ngIf="policy" class="container">
+    <div class="h4 text-center">{{ policy.policy.name }}</div>
+    <div class="h6 text-center">by {{ policy.policy.insurer }}</div>
+    <div *ngIf="policy.cost > 0.0" class="text-center p-2">
+        <button type="button" class="btn btn-primary text-center" (click)="purchase()">{{ policy.cost | currency:'INR':'symbol' }}</button>
         
     </div>
-    <div *ngIf="policy.totalCost <= 0.0">
-        Policy not available for given params
+    <div *ngIf="policy.cost <= 0.0">
+        <div class="alert alert-info text-center">
+            Please submit valid parameters for this policy to get cost
+        </div>
     </div>
-    <pdf-viewer 
-    [src]="apiUrl + policy.policy.documentPath" [render-text]="true"
-    [show-all]="false"
-    style="display: block;"
-    ></pdf-viewer>
+
+    <div class="row mb-3">
+        <div class="col-md-3 table-responsive px-3">
+            <table class="table table-sm">
+                <!-- <thead>
+                    <tr>
+                        <th>Available cover values</th>
+                    </tr>
+                </thead> -->
+                <tbody>
+                    <div>
+                        <tr *ngIf="policy.policy?.coverValues">
+                            <td>Available cover values</td>
+                            <td><div *ngFor="let coverValue of policy.policy.coverValues; let isLast=last">{{ coverValue | currency:'INR':'symbol':'1.0-0' }}{{ isLast? '' : ', ' }}</div></td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.minCoverPeriod">
+                            <td>Minimum cover period</td>
+                            <td>{{ policy.policy.minCoverPeriod }} years</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.maxCoverPeriod">
+                            <td>Maximum cover period</td>
+                            <td>{{ policy.policy.maxCoverPeriod }} years</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.minNumberCovered">
+                            <td>Minimum number of people covered</td>
+                            <td>{{ policy.policy.minNumberCovered }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.maxNumberCovered">
+                            <td>Maximum number of people covered</td>
+                            <td>{{ policy.policy.maxNumberCovered }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.deductible">
+                            <td>Deductible</td>
+                            <td>{{ policy.policy?.deductible | currency:'INR':'symbol':'1.0-0' }}</td>
+                        </tr>
+
+                        <tr *ngIf="policy.policy?.minCoverValue">
+                            <td>Minimum cover value</td>
+                            <td>{{ policy.policy.minCoverValue | currency:'INR':'symbol':'1.0-0' }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.maxCoverValue">
+                            <td>Maximum cover value</td>
+                            <td>{{ policy.policy.maxCoverValue | currency:'INR':'symbol':'1.0-0' }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.minCoverTillAge">
+                            <td>Minimum age upto which covered</td>
+                            <td>{{ policy.policy.minCoverTillAge }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.maxCoverTillAge">
+                            <td>Maximum age upto which covered</td>
+                            <td>{{ policy.policy.maxCoverTillAge }}</td>
+                        </tr>
+                        <tr *ngIf="policy.policy?.examinationType">
+                            <td>Medical examination type</td>
+                            <td>{{ policy.policy?.examinationType}}</td>
+                        </tr>
+
+                        <tr *ngIf="policy.policy?.additionalFeatures">
+                            <td>Additional features</td>
+                            <td><ul class="list-group">
+                                   <li class="list-group-item" *ngFor="let additionalFeature of policy.policy.additionalFeatures; let isLast=last">
+                                    {{ additionalFeature }}{{ isLast? '' : ', ' }}
+                                   </li>  
+                                </ul>
+                            </td>
+                        </tr>
+                    </div>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-9 border px-3" style="max-height: 75vh;overflow: scroll;">
+            <pdf-viewer 
+            [src]="apiUrl + policy.policy.documentPath" 
+            [render-text]="true"
+            [show-all]="true"
+            [original-size]="false"
+            [external-link-target]="'blank'"
+            style="display: block;"
+            ></pdf-viewer>
+        </div>
+    </div>
+   
 </div>
 <div *ngIf="policy == null">
     No such policy found

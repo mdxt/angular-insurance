@@ -39,7 +39,7 @@ export class CreatePurchaseComponent implements OnInit {
     
     this.policyService.doPurchase(request).subscribe(
       next => { console.log('purchase successful') },
-      error => { console.log('purchase error - '+error) }
+      error => { console.log('purchase error - '+JSON.stringify(error)) }
     );
   }
 }

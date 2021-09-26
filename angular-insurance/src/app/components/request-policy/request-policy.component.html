@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid my-3">
     <form [formGroup]="requestPoliciesFormGroup" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <label for="policyType">Policy type:</label>
@@ -151,10 +151,6 @@
                 </div>
             </div>
 
-            <!-- <div class="form-group">
-                <label for="coverValue">Cover value: {{ coverValue.value | currency:'INR':'symbol':'1.0-0'}}</label>
-                <input #coverValue class="form-control" id="coverValue" formControlName="coverValue" type="range" min="50000" max="20000000">
-            </div> -->
             <div class="form-group">
                 <label for="coverValue">Cover value:</label>
                 <select class="form-control" id="coverValue" formControlName="coverValue">
@@ -165,8 +161,8 @@
             </div>
 
             <div class="form-group">
-                <label for="coverTillAge">Cover till age:</label>
-                <input class="form-control" id="coverTillAge" formControlName="coverTillAge" type="number" min="18" max="99">
+                <label for="coverPeriod">Cover period:</label>
+                <input class="form-control" id="coverPeriod" formControlName="coverPeriod" type="number" min="1" max="10">
                 <!-- <div *ngIf="coverTillAge.invalid && (coverTillAge.dirty || coverTillAge.touched)" class="alert alert-danger">
                     <div *ngIf="coverTillAge.errors.required || coverTillAge.errors.notOnlyWhitespace">
                         Cover till age is required

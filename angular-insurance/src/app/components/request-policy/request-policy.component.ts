@@ -44,9 +44,9 @@ export class RequestPolicyComponent implements OnInit {
 
   handlePolicyTypeChange(policyType: string) {
     //remove all controls except policy type
-    // for(let existingControl in this.requestPoliciesFormGroup.controls){
-    //   if(existingControl !== "policyType") this.requestPoliciesFormGroup.removeControl(existingControl);
-    // }
+    for(let existingControl in this.requestPoliciesFormGroup.controls){
+      if(existingControl !== "policyType") this.requestPoliciesFormGroup.removeControl(existingControl);
+    }
 
     console.log('requested policy type - '+policyType);    
     
@@ -71,8 +71,8 @@ export class RequestPolicyComponent implements OnInit {
       this.requestPoliciesFormGroup.addControl('age', new FormControl(18, [Validators.required, Validators.min(18) ,Validators.max(99)]));
       this.requestPoliciesFormGroup.addControl('numberCovered', new FormControl(1, [Validators.required, Validators.min(1) ,Validators.max(5)]));
       this.requestPoliciesFormGroup.addControl('zipCode', new FormControl('', [Validators.required]));
-      this.requestPoliciesFormGroup.addControl('coverValue', new FormControl('500000', [Validators.required, FormValidators.valueFromEnumOnly(Object.keys(CoverValueEnum).filter(k => !isNaN(+k)))])); //TODO
-      this.requestPoliciesFormGroup.addControl('coverTillAge', new FormControl(18, [Validators.required, Validators.min(18) ,Validators.max(99)]));
+      this.requestPoliciesFormGroup.addControl('coverValue', new FormControl("500000", [Validators.required, FormValidators.valueFromEnumOnly(Object.keys(CoverValueEnum).filter(k => !isNaN(+k)))])); //TODO
+      this.requestPoliciesFormGroup.addControl('coverPeriod', new FormControl(1, [Validators.required, Validators.min(1) ,Validators.max(10)]));
 	    this.requestPoliciesFormGroup.addControl('paymentPeriod', new FormControl(this.paymentPeriods[0], [Validators.required, FormValidators.valueFromEnumOnly(this.paymentPeriods)]));
       this.currentPolicyType = policyType;
       console.log('current policy type - '+this.currentPolicyType); 

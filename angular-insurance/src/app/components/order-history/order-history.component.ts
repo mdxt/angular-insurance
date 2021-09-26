@@ -1,5 +1,8 @@
+import { JsonpClientBackend } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { request } from 'http';
+import { error } from 'protractor';
 import { User } from 'src/app/common/user';
 import { AuthService } from 'src/app/services/authservice.service';
 import { PolicyService } from 'src/app/services/policy.service';
@@ -13,6 +16,8 @@ export class OrderHistoryComponent implements OnInit {
   user: User;
   type: string;
   data: any;
+  dataKeys: any;
+  policyType: string;
 
   constructor(private authService: AuthService,
               private route: ActivatedRoute,
@@ -30,14 +35,33 @@ export class OrderHistoryComponent implements OnInit {
   }
 
   getPurchaseData(policyType: string){
+    this.policyType = policyType;
     console.log('called get purchase data of type '+policyType);
     console.log('component type - '+this.type);
     if(this.type == 'history'){
-      this.policyService.getUserOrderHistory(policyType).subscribe(data => this.data = data);
+      this.policyService.getUserOrderHistory(policyType).subscribe(data => {
+        this.data = data;
+        this.dataKeys = data ? Object.keys(data[0]) : null;
+      });
     } 
     else if(this.type == 'underwrite'){
-      this.policyService.getPoliciesForUnderwriter(policyType).subscribe(data => { this.data = data; console.log('data - '+data) });
+      this.policyService.getPoliciesForUnderwriter(policyType).subscribe(data => { 
+        this.data = data; 
+        this.dataKeys = data ? Object.keys(data[0]) : null;
+        console.log('data - '+JSON.stringify(data)); 
+      });
     }
   }
 
+  setPolicyApproval(id: string, status: string){
+    console.log('setPolicyApproval '+id+', '+status);
+    
+    if(status!='yes' && status!='no') return;
+    
+    this.policyService.setPolicyApproval(this.policyType, (status == 'yes') ? true : false, +id).subscribe(
+      next => { console.log(JSON.stringify(next)); },
+      error => { console.log(JSON.stringify(error)); }
+    );
+    
+  }
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Policy, PolicyAndCost } from 'src/app/common/policy';
 import { PolicyService } from 'src/app/services/policy.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class PolicyDetailsComponent implements OnInit {
   requestPolicyList: any;
 
-  policy: PolicyAndCost;
+  policy: any;
 
   apiUrl: string = environment.apiUrl;
 
@@ -30,12 +29,14 @@ export class PolicyDetailsComponent implements OnInit {
 
   handlePolicyDetails() {
     const policyId: number = +this.route.snapshot.paramMap.get('id');
+    const policyType: string = this.route.snapshot.paramMap.get('type');
 
     this.policyService.requestPolicyList.subscribe(
       request => { 
+          //if(request == null) return;
           console.log('requestPolicyList - '+JSON.stringify(request));
           this.requestPolicyList = request;
-          this.policyService.getPolicyDetailsWithCost(policyId, request).subscribe(
+          this.policyService.getPolicyDetailsWithCost(policyId, policyType ,request).subscribe(
             response => {
               this.policy = response;
               console.log('obtained response from policies get request- ' + JSON.stringify(response));
@@ -50,9 +51,8 @@ export class PolicyDetailsComponent implements OnInit {
   }
 
   purchase() {
-    this.policyService.setCurrentPolicyIdAndCost(this.policy.policy.id,this.policy.totalCost);
+    this.policyService.setCurrentPolicyIdAndCost(this.policy.policy.id,this.policy.cost);
     this.router.navigateByUrl('/purchase');
     
   }
-
 }

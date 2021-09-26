@@ -1,17 +1,33 @@
-<ul class="nav nav-tabs">
+<ul class="nav nav-pills my-3">
     <li class="nav-item">
-      <button class="nav-link active" data-toggle="tab" (click)="getPurchaseData('LIFE')">Life Insurance</button>
+      <a class="nav-link" data-toggle="pill" (click)="getPurchaseData('LIFE')" href="#">Life Insurance</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab">Menu 1</a>
+      <a class="nav-link" data-toggle="pill" (click)="getPurchaseData('DENTAL')" href="#">Dental Insurance</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab">Menu 2</a>
+      <a class="nav-link" data-toggle="pill" href="#">Menu 2</a>
     </li>
-  </ul>
+</ul>
 <div *ngIf="data">
-  <div *ngFor="let purchase of data">
-    {{ purchase | json }}
-  </div>
-    
+    <table class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th *ngFor="let dataKey of dataKeys">{{ dataKey | titlecase}}</th>
+          <th>Approve?</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let purchase of data">
+              <td *ngFor="let dataKey of dataKeys">{{ purchase[dataKey] }}</td>
+              <td>
+                <select #approvalStatus (change)="setPolicyApproval(purchase['id'], approvalStatus.value)">
+                  <option value="">(select)</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </td>
+            </tr>
+      </tbody>
+    </table>
 </div>
