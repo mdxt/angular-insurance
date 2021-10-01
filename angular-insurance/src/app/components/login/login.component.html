@@ -1,27 +1,33 @@
-<form [formGroup]="form">
-    <fieldset>
-        <legend>Login</legend>
-        <div class="form-field">
-            <label>Email:</label>
-            <input name="email" formControlName="email">
+<div class="container justify-content-center col-sm-3 border p-3">
+    <form [formGroup]="form">
+       
+        <h6 class="text-center">Login</h6>
+     
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input #email class="form-control" id="email" formControlName="email" type="email">
         </div>
-        <div class="form-field">
-            <label>Password:</label>
-            <input name="password" formControlName="password" 
-                   type="password">
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input #password class="form-control" id="password" formControlName="password" type="password">
         </div>
-    </fieldset>
-    <div class="form-buttons">
-        <button class="button button-primary" 
-                (click)="login()">Login</button>
-    </div>
-    <div class="form-buttons">
-        <button class="button button-primary" 
-                (click)="tryAdmin()">tryAdmin</button>
-    </div>
-</form>
+        
+        <div class="text-center">
+            <button class="btn btn-primary mr-3" 
+                    [disabled]="this.form.invalid" 
+                    (click)="login()">Login</button>
+            <button class="btn btn-primary ml-3" 
+                    [disabled]="this.form.invalid" 
+                    (click)="signUp()">Sign Up</button>
+        </div>
+        <!-- <div class="form-buttons">
+            <button class="button button-primary" 
+                    (click)="tryAdmin()">tryAdmin</button>
+        </div> -->
+    </form>
+</div>
 
-<form [formGroup]="requestForm" *ngIf="requestForm">
+<!-- <form [formGroup]="requestForm" *ngIf="requestForm">
     <div class="form-group">
         <label for="policyType">Policy type:</label>
         <select id="policyType" formControlName="policyType" class="form-control">
@@ -33,16 +39,16 @@
             <div class="form-group" >
                 <label for="data.value['name']">{{ data.value['name'] | titlecase}}:</label>
 
-                <!-- when select type -->
+                when select type
                 <div *ngIf="data.value['controlType'] == 'select'">
                     <select id="{{ data.value['name'] }}" formControlName="{{ data.value['name'] }}" class="form-control"> 
                         <option *ngFor="let option of data.value['permittedValues']" value="{{ option }}">{{ option }}</option>
                     </select>
                 </div>
 
-                <!-- when input type -->
+                when input type
                 <div *ngIf="data.value['controlType'] == 'input'">
-                    <!-- when number type -->
+                     when number type
                     <div *ngIf="data.value['dataType'] == 'number'">
                         <input id="{{ data.value['name'] }}" formControlName="{{ data.value['name'] }}" type="number" min="{{ +data.value['min'] }}" max="{{ +data.value['max'] }}" class="form-control">
                     </div>
@@ -53,4 +59,4 @@
         </div>
     </div>
 
-</form>
+</form> -->

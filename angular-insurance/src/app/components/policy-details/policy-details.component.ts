@@ -43,7 +43,7 @@ export class PolicyDetailsComponent implements OnInit {
             },
             error => {
               this.policy = null;
-              console.log('obtained error from policies get request- ' + error);
+              console.log('obtained error from policies get request- ' + JSON.stringify(error));
             }
           ) 
       }

@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { PolicyService } from 'src/app/services/policy.service';
 import { FormValidators } from 'src/app/validators/form-validators';
 
 @Component({
   selector: 'app-create-purchase',
   templateUrl: './create-purchase.component.html',
-  styleUrls: ['./create-purchase.component.css']
+  styleUrls: ['./create-purchase.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreatePurchaseComponent implements OnInit {
   additionalDetailsFormGroup: FormGroup;
@@ -15,7 +18,8 @@ export class CreatePurchaseComponent implements OnInit {
   id: number;
   cost: number;
 
-  constructor(private policyService: PolicyService) { }
+  constructor(private policyService: PolicyService,
+              private router: Router) { }
 
   ngOnInit() {
     this.additionalDetailsFormGroup = new FormGroup({
@@ -37,9 +41,18 @@ export class CreatePurchaseComponent implements OnInit {
     Object.assign(request, this.requestPolicyList, this.additionalDetailsFormGroup.getRawValue(), { 'cost': this.cost }, { 'policyId': this.id });
     console.log('constructed purchase request - '+JSON.stringify(request));
     
-    this.policyService.doPurchase(request).subscribe(
-      next => { console.log('purchase successful') },
+    this.policyService.doPurchase(request).pipe(take(1)).subscribe(
+      next => { 
+        console.log('purchase successful - '+next); 
+        alert('Purchase successfully submitted');
+        this.router.navigate(['/policies']);
+      },
       error => { console.log('purchase error - '+JSON.stringify(error)) }
     );
+  }
+
+  formatEnumForOutput(inp: String): String {
+    let temp: string = inp.split('_').join(' ');
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
   }
 }

@@ -31,7 +31,7 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string){
+  login(email: string, password: string): Observable<boolean>{
     console.log("in login method of AuthService");
     //return this.temp();
   
@@ -93,6 +93,10 @@ export class AuthService {
 
   logout() {
     this.emitAndSave(null);
+  }
+
+  signUp(userDetails: any): Observable<boolean> {
+    return this.httpClient.post<boolean>(environment.apiUrl+'/public/signup', userDetails);
   }
 
   emitAndSave(user: User) {

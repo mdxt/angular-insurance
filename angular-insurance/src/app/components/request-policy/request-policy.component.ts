@@ -25,6 +25,8 @@ export class RequestPolicyComponent implements OnInit {
   paymentPeriods: string[] = Object.keys(PaymentPeriodEnum).filter(k => isNaN(+k));
 
   currentPolicyType: string;
+  obtainedDistrict: string;
+  obtainedState: string;
 
   enumToStringArray(enumObject: Object): string[]{
     return Object.keys(enumObject).filter(k => isNaN(+k));
@@ -32,14 +34,22 @@ export class RequestPolicyComponent implements OnInit {
 
   constructor(private policyService: PolicyService,
               private formBuilder: FormBuilder,
-              private httpClient: HttpClient) { }
+              private httpClient: HttpClient) {
+                
+               }
 
   ngOnInit() {
+    console.log('request policy component init');
     this.requestPoliciesFormGroup = this.formBuilder.group({
       policyType: new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace, FormValidators.valueFromEnumOnly(this.policyTypes)]),
     });
 
     this.requestPoliciesFormGroup.get('policyType').valueChanges.subscribe(selectedPolicyType => this.handlePolicyTypeChange(selectedPolicyType));
+
+    if(localStorage.getItem('request') != null){
+      this.requestPoliciesFormGroup.setValue(JSON.parse(localStorage.getItem('request')));
+      this.policyService.requestPolicyList.next(this.requestPoliciesFormGroup.getRawValue());
+    }
   }
 
   handlePolicyTypeChange(policyType: string) {
@@ -59,7 +69,7 @@ export class RequestPolicyComponent implements OnInit {
 	    this.requestPoliciesFormGroup.addControl('occupationType',  new FormControl(this.occupationTypes[0], [Validators.required, FormValidators.valueFromEnumOnly(this.occupationTypes)]));
 	    this.requestPoliciesFormGroup.addControl('qualificationLevel', new FormControl(this.qualificationLevels[0], [Validators.required, FormValidators.valueFromEnumOnly(this.qualificationLevels)]));
 	    this.requestPoliciesFormGroup.addControl('coverValue', new FormControl(50000, [Validators.required, Validators.min(50000) ,Validators.max(20000000)]));
-      this.requestPoliciesFormGroup.addControl('coverTillAge', new FormControl(18, [Validators.required, Validators.min(18) ,Validators.max(99)]));
+      this.requestPoliciesFormGroup.addControl('coverTillAge', new FormControl(18, [Validators.required, Validators.min(18) ,Validators.max(99), FormValidators.valueGreaterThan(this.requestPoliciesFormGroup.get('age'))]));
 	    this.requestPoliciesFormGroup.addControl('paymentPeriod', new FormControl(this.paymentPeriods[0], [Validators.required, FormValidators.valueFromEnumOnly(this.paymentPeriods)]));
       this.currentPolicyType = policyType;
       console.log('current policy type - '+this.currentPolicyType); 
@@ -76,7 +86,10 @@ export class RequestPolicyComponent implements OnInit {
 	    this.requestPoliciesFormGroup.addControl('paymentPeriod', new FormControl(this.paymentPeriods[0], [Validators.required, FormValidators.valueFromEnumOnly(this.paymentPeriods)]));
       this.currentPolicyType = policyType;
       console.log('current policy type - '+this.currentPolicyType); 
-      this.requestPoliciesFormGroup.get('zipCode').valueChanges.pipe(debounceTime(500)).subscribe(zipCode => this.checkZipCode(zipCode));
+      this.requestPoliciesFormGroup.get('zipCode').valueChanges
+                                                  .pipe((valueChange) => { this.requestPoliciesFormGroup.controls['zipCode'].setErrors({'incomplete': true}); return valueChange})
+                                                  .pipe(debounceTime(300)).subscribe(zipCode => this.checkZipCode(zipCode));
+      this.checkZipCode(0);
     }
   }
 
@@ -84,13 +97,16 @@ export class RequestPolicyComponent implements OnInit {
     this.httpClient.get<any>('https://api.postalpincode.in/pincode/'+zipCode).subscribe(
       next => {
         if(next[0]['Status'] == 'Success' && next[0]['PostOffice']){
-          
-          console.log('Obtained district - '+next[0]['PostOffice'][0]['District']);
-          console.log('Obtained state - '+next[0]['PostOffice'][0]['State']);
+  
+          this.obtainedDistrict = next[0]['PostOffice'][0]['District'];
+          this.obtainedState = next[0]['PostOffice'][0]['State'];
+
           this.requestPoliciesFormGroup.controls['zipCode'].setErrors(null);
         }
         else if(next[0]['Status'] == 'Error'){
           console.log('no zipcode data found');
+          this.obtainedDistrict = null;
+          this.obtainedState = null;
           this.requestPoliciesFormGroup.controls['zipCode'].setErrors({'incorrect': true});
         }
       },
@@ -100,11 +116,20 @@ export class RequestPolicyComponent implements OnInit {
 
   onSubmit() {
     // const request: RequestPolicyList = this.requestPoliciesFormGroup.getRawValue();
+
+    // if(this.currentPolicyType == 'LIFE'){
+    //   if(+this.requestPoliciesFormGroup.get('age').value >= +this.requestPoliciesFormGroup.get('coverTillAge').value){
+    //     this.requestPoliciesFormGroup.get('coverTillAge').setErrors({lessThanCurrentAge: true});
+    //     return;
+    //   }
+    // }
+
     console.log('Submitting following');
     console.log(this.requestPoliciesFormGroup.getRawValue());
 
     this.policyService.setCurrentPolicyIdAndCost(0, 0.0);
     this.policyService.requestPolicyList.next(this.requestPoliciesFormGroup.getRawValue());//request);
+    localStorage.setItem('request',JSON.stringify(this.requestPoliciesFormGroup.getRawValue()));
   }
 
   formatEnumForOutput(inp: String): String {
@@ -114,7 +139,9 @@ export class RequestPolicyComponent implements OnInit {
   get policyType() { return this.requestPoliciesFormGroup.get('policyType'); }
   get gender() { return this.requestPoliciesFormGroup.get('gender'); }
   get age() { return this.requestPoliciesFormGroup.get('age'); }
+  get coverTillAge() { return this.requestPoliciesFormGroup.get('coverTillAge'); }
   get numberCovered() { return this.requestPoliciesFormGroup.get('numberCovered'); }
   get zipCode() { return this.requestPoliciesFormGroup.get('zipCode'); }
+  get coverPeriod() { return this.requestPoliciesFormGroup.get('coverPeriod'); }
   get CoverValueEnum() { return CoverValueEnum; }
 }

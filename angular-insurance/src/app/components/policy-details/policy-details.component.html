@@ -71,8 +71,8 @@
                         <tr *ngIf="policy.policy?.additionalFeatures">
                             <td>Additional features</td>
                             <td><ul class="list-group">
-                                   <li class="list-group-item" *ngFor="let additionalFeature of policy.policy.additionalFeatures; let isLast=last">
-                                    {{ additionalFeature }}{{ isLast? '' : ', ' }}
+                                   <li class="list-group-item" *ngFor="let additionalFeature of policy.policy.additionalFeatures">
+                                    {{ additionalFeature }}<!-- {{ isLast? '' : ', ' }} -->
                                    </li>  
                                 </ul>
                             </td>

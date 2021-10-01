@@ -39,3 +39,9 @@ export enum CoverValueEnum {
 	TWENTY_LAKH = 2000000,
 	FIFTY_LAKH = 5000000
 }
+
+export enum ExaminationTypeEnum {
+	PHYSICAL,
+	VIDEO,
+	NONE
+}

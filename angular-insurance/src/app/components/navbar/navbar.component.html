@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+        
+    <!-- Links -->
+    <ul class="navbar-nav mr-auto">
+        <a class="navbar-brand" routerLink="/policies">Insurance App</a>
+        
+        <li class="nav-item border-left border-secondary" *ngIf="user?.authorities.includes('ROLE_USER')">
+            <a class="nav-link" routerLink="/history">Purchase History</a>
+        </li>
+        <li class="nav-item border-left border-secondary" *ngIf="user?.authorities.includes('ROLE_UNDERWRITER')">
+            <a class="nav-link" routerLink="/underwrite">Underwrite</a>
+        </li>
+        <li class="nav-item border-left border-secondary" *ngIf="user?.authorities.includes('ROLE_ADMIN')">
+            <a class="nav-link" routerLink="/users">Set Underwriters</a>
+        </li>
+        <li class="nav-item border-left border-secondary" *ngIf="user?.authorities.includes('ROLE_ADMIN')">
+            <a class="nav-link" routerLink="/create">New Policy</a>
+        </li>
+        <li class="nav-item border-left border-secondary" *ngIf="user?.authorities.includes('ROLE_ADMIN')">
+            <a class="nav-link" routerLink="/all">All History</a>
+        </li>
+    </ul>
+    <!-- <form *ngIf="user?.username" class="form-inline">
+        <div class="navbar-text mr-sm-3" >Logged in as {{ user.username }}</div> 
+        <button class="btn btn-outline-success" href="#">Log Out</button>
+    </form> -->
+    <div *ngIf="user?.username">
+        <div class="d-inline navbar-text font-weight-light mr-sm-3 my-auto">Logged in as {{ user.username }}</div>
+        <button class="d-inline btn btn-outline-primary" (click)="logOut()">Log Out</button>
+    </div>
+    <div *ngIf="!user?.username">
+        <button class="d-inline btn btn-outline-primary" (click)="logIn()">Log In</button>
+    </div>
+</nav>

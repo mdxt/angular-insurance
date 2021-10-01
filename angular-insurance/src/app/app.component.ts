@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { User } from './common/user';
 import { AuthService } from './services/authservice.service';
 
@@ -9,9 +11,25 @@ import { AuthService } from './services/authservice.service';
 })
 export class AppComponent {
   title = 'angular-insurance';
-  user: User;
+  //user: User;
+  params: any;
+  showRequestForm: boolean;
 
-  constructor(private authService: AuthService){
-    authService.user.subscribe(user => this.user = user);
+  constructor(private authService: AuthService,
+              private router: Router){
+    //this.authService.user.subscribe(user => this.user = user);
+    this.router.events
+    .subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          console.log('router event '+event);
+          if(event['urlAfterRedirects'].startsWith('/policies') ||
+            event['urlAfterRedirects'].startsWith('/policy')){
+            this.showRequestForm = true;
+          }
+          else{
+            this.showRequestForm = false;
+          }
+        }
+    });
   }
 }

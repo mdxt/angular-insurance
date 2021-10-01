@@ -1,0 +1,157 @@
+<div class="container justify-content-center col-sm-6 border p-3">
+    <div class="row">
+        <div class="container d-flex justify-content-center text-center">
+            <form [formGroup]="uploadForm">
+                <input class="btn border" type="file" accept=".pdf" name="profile" (change)="onFileSelect($event)" />
+                <button class="btn btn-primary ml-3" (click)="doFileUpload()">Upload</button>
+            </form>
+        </div>
+    </div>
+    
+    <div *ngIf="fileSuccessfullyUploaded">
+        <div class="row justify-content-center">
+            <!-- {{ currentFileName }} -->
+            <ul class="nav nav-pills my-3">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" (click)="handlePolicyTypeChange('LIFE')" href="#">Life Insurance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" (click)="handlePolicyTypeChange('DENTAL')" href="#">Dental Insurance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#">Menu 2</a>
+                </li>
+            </ul>
+        </div>
+        <form *ngIf="createPolicyType" [formGroup]="createPolicyFormGroup" (ngSubmit)="onSubmit()">
+            <!-- private String insurer;
+                private String name;
+                
+                //store as static files or in database?
+                //http://www.africau.edu/images/default/sample.pdf
+                private String documentPath;
+                
+                private String[] additionalFeatures; -->
+            <div class="form-group">
+                <label for="insurer">Insurer name:</label>
+                <input type="text" class="form-control"  formControlName="insurer" id="insurer">
+            </div>
+
+            <div class="form-group">
+                <label for="name">Policy name:</label>
+                <input type="text" class="form-control"  formControlName="name" id="name">
+            </div>
+
+            <div class="form-group">
+                <label for="additionalFeaturesCSV">Additional Features (csv):</label>
+                <input type="text" class="form-control"  formControlName="additionalFeaturesCSV" id="additionalFeaturesCSV">
+            </div>
+
+            <div *ngIf="createPolicyType=='LIFE'">
+                <!-- 	private Long minCoverValue;
+                private Long maxCoverValue;
+                
+                @JsonIgnore
+                private Double multiplierCoverValue;
+                
+                //age till which the policy applies
+                private Integer minCoverTillAge;
+                private Integer maxCoverTillAge;
+                
+                @JsonIgnore
+                private Double multiplierCoverTillAge;
+                
+                private ExaminationTypeEnum examinationType; -->
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="minCoverValue">Min Cover Value:</label>
+                        <input class="form-control" id="minCoverValue" formControlName="minCoverValue" type="number" min="1" max="20000000">
+                    </div>
+                    <div class="col">
+                        <label for="maxCoverValue">Max Cover Value:</label>
+                        <input class="form-control" id="maxCoverValue" formControlName="maxCoverValue" type="number" min="1" max="20000000">
+                    </div>
+                    <div class="col">
+                        <label for="multiplierCoverValue">Cover Value Multiplier:</label>
+                        <input class="form-control" id="multiplierCoverValue" formControlName="multiplierCoverValue" type="number" min="1" max="200" step="0.01">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="minCoverTillAge">Cover till min age:</label>
+                        <input class="form-control" id="minCoverTillAge" formControlName="minCoverTillAge" type="number" min="18" max="99">
+                    </div>
+                    <div class="col">
+                        <label for="maxCoverTillAge">Cover till max age:</label>
+                        <input class="form-control" id="maxCoverTillAge" formControlName="maxCoverTillAge" type="number" min="18" max="99">
+                    </div>
+                    <div class="col">
+                        <label for="multiplierCoverTillAge">Cover Till Age Multiplier:</label>
+                        <input class="form-control" id="multiplierCoverTillAge" formControlName="multiplierCoverTillAge" type="number" min="1" max="200" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="examinationType">Examination Type:</label>
+                    <select class="form-control" id="examinationType" formControlName="examinationType">
+                        <option *ngFor="let examinationType of examinationTypes">
+                            {{ examinationType }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="createPolicyType=='DENTAL'">
+                <div class="row mb-3">
+                    <div class="col-7">
+                        <label for="coverValuesCSV">Cover Values (select to add):</label>
+                        <select #coverValuesSelector id="coverValuesSelector" class="ml-3 input-sm" (change)="newCoverValueSelected(coverValuesSelector.value)"> 
+                            <option hidden disabled selected value></option>
+                            <option *ngFor="let coverValue of coverValues" value="{{ coverValue }}">
+                                {{ coverValue | currency:'INR':'symbol':'1.0-0' }}
+                            </option>
+                        </select>
+                        <input type="text" class="form-control"  formControlName="coverValuesCSV" id="coverValuesCSV" readonly>
+                    </div>
+                    <div class="col-5">
+                        <label for="multiplierCoverValue">Cover Value Multiplier:</label>
+                        <input class="form-control" id="multiplierCoverValue" formControlName="multiplierCoverValue" type="number" min="1" max="200" step="0.01">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="minCoverPeriod">Cover till min period:</label>
+                        <input class="form-control" id="minCoverPeriod" formControlName="minCoverPeriod" type="number" min="1" max="10">
+                    </div>
+                    <div class="col">
+                        <label for="maxCoverPeriod">Cover till max period:</label>
+                        <input class="form-control" id="maxCoverPeriod" formControlName="maxCoverPeriod" type="number" min="1" max="10">
+                    </div>
+                    <div class="col">
+                        <label for="multiplierCoverPeriod">Cover Period Multiplier:</label>
+                        <input class="form-control" id="multiplierCoverPeriod" formControlName="multiplierCoverPeriod" type="number" min="1" max="200" step="0.01">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="minNumberCovered">Min number covered:</label>
+                        <input class="form-control" id="minNumberCovered" formControlName="minNumberCovered" type="number" min="1" max="4">
+                    </div>
+                    <div class="col">
+                        <label for="maxNumberCovered">Max number covered:</label>
+                        <input class="form-control" id="maxNumberCovered" formControlName="maxNumberCovered" type="number" min="1" max="4">
+                    </div>
+                    <div class="col">
+                        <label for="deductible">Deductible:</label>
+                        <input class="form-control" id="deductible" formControlName="deductible" type="number" min="0" max="500000" step="1000">
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="submit" [disabled]="this.createPolicyFormGroup.invalid" class="btn btn-primary form-control">Submit</button>
+            <button class="btn" (click)="getFormValidationErrors()">dsdf</button>
+        </form>
+    </div>
+</div>

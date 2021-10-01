@@ -1,0 +1,35 @@
+
+<div class="container justify-content-center col-sm-4 border p-3">
+    <label for="searchString">Find users from search string:</label>
+    <input #searchString class="form-control" id="searchString" type="text" (keyup)="keyUp.next($event)">
+    
+    <div *ngIf="userData" class="container d-flex justify-content-center text-center">
+        <table class="table table-striped table-responsive">
+          <thead>
+            <tr>
+              <th *ngFor="let dataKey of dataKeys">{{ dataKey | titlecase}}</th>
+              <th *ngIf="type=='underwrite'" class="fixed-column">Approve?</th>
+              <th>Email</th>
+              <th>Roles</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+                <tr *ngFor="let user of userData">
+                  <td>{{ user['email'] }}</td>
+                  <td><div *ngFor="let role of user['roles']; let isLast=last">{{role.name}}{{ isLast? '' : ', ' }}</div></td>
+                  <td><button class="btn btn-primary" (click)="setAsUnderwriter(user['email'])">Set as underwriter</button></td>
+                  <!-- <td *ngFor="let dataKey of dataKeys">{{ purchase[dataKey] }}</td> -->
+
+                  <!-- <td *ngIf="type=='underwrite'" class="fixed-column">
+                    <select #approvalStatus (change)="setPolicyApproval(purchase['id'], approvalStatus.value)">
+                      <option value="">(select)</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </td> -->
+                </tr>
+          </tbody>
+        </table>
+    </div>
+</div>

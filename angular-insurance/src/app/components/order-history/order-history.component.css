@@ -1,4 +1,5 @@
-th:last-child, td:last-child
+/* th:last-child, td:last-child */
+.fixed-column
 {
   position:sticky;
   right:0px;

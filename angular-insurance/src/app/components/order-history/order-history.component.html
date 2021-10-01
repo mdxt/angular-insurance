@@ -9,18 +9,59 @@
       <a class="nav-link" data-toggle="pill" href="#">Menu 2</a>
     </li>
 </ul>
-<div *ngIf="data">
+<div *ngIf="data?.length>0" class="d-flex justify-content-center">
+    <!-- <div *ngIf="data[0].buyerName">sdgfsgfs</div> -->
     <table class="table table-striped table-responsive">
       <thead>
         <tr>
-          <th *ngFor="let dataKey of dataKeys">{{ dataKey | titlecase}}</th>
-          <th>Approve?</th>
+          <!-- <th *ngFor="let dataKey of dataKeys">{{ dataKey | titlecase}}</th> -->
+          <th *ngIf="data[0].buyerName">Buyer Name</th>
+          <th *ngIf="data[0].gender">Gender</th>
+          <th *ngIf="data[0].age">Age</th>
+          <th *ngIf="data[0].tobaccoUser != null">Tobacco User</th>
+          <th *ngIf="data[0].occupationType">Occupation Type</th>
+          <th *ngIf="data[0].incomeRange">Income Range</th>
+          <th *ngIf="data[0].qualificationLevel">Qualification Level</th>
+          <th *ngIf="data[0].address">Address</th>
+          <th *ngIf="data[0].zipCode">Zip Code</th>
+          <th *ngIf="data[0].policy_id">Policy ID</th>
+          <th *ngIf="data[0].coverValue">Cover Value</th>
+          <th *ngIf="data[0].numberCovered">Number Covered</th>
+          <th *ngIf="data[0].coverTillAge">Cover Till Age</th>
+          <th *ngIf="data[0].coverPeriod">Cover Period</th>
+          <th *ngIf="data[0].cost">Cost Per Payment Period</th>
+          <th *ngIf="data[0].paymentPeriod">Payment Period</th>
+          <th *ngIf="(data[0].username && type!='history')">User Account</th>
+          <th *ngIf="data[0].applicationState">Application State</th>
+          <th *ngIf="(data[0].assigned_underwriter && type=='all')">Assigned Underwriter</th>
+
+          <th *ngIf="type=='underwrite'" class="fixed-column">Approve?</th>
         </tr>
       </thead>
       <tbody>
             <tr *ngFor="let purchase of data">
-              <td *ngFor="let dataKey of dataKeys">{{ purchase[dataKey] }}</td>
-              <td>
+              <!-- <td *ngFor="let dataKey of dataKeys">{{ purchase[dataKey] }}</td> -->
+              <td *ngIf="purchase.buyerName">{{ purchase.buyerName }}</td>
+              <td *ngIf="purchase.gender">{{ purchase.gender | titlecase }}</td>
+              <td *ngIf="purchase.age">{{ purchase.age }}</td>
+              <td *ngIf="purchase.tobaccoUser != null">{{ ''+purchase.tobaccoUser }}</td>
+              <td *ngIf="purchase.occupationType">{{ purchase.occupationType | titlecase }}</td>
+              <td *ngIf="purchase.incomeRange">{{ formatEnumForOutput(purchase.incomeRange) | titlecase }}</td>
+              <td *ngIf="purchase.qualificationLevel">{{ formatEnumForOutput(purchase.qualificationLevel) | titlecase }}</td>
+              <td *ngIf="purchase.address">{{ purchase.address }}</td>
+              <td *ngIf="purchase.zipCode">{{ purchase.zipCode }}</td>
+              <td *ngIf="purchase.policy_id"> <a routerLink="{{ '/policy/' + policyType + '/' + purchase.policy_id }}" target="_blank">{{ purchase.policy_id }}</a></td>
+              <td *ngIf="purchase.coverValue">{{ purchase.coverValue | currency:'INR':'symbol':'1.0-0' }}</td>
+              <td *ngIf="purchase.numberCovered">{{ purchase.numberCovered }}</td>
+              <td *ngIf="purchase.coverTillAge">{{ purchase.coverTillAge }}</td>
+              <td *ngIf="purchase.coverPeriod">{{ purchase.coverPeriod }} year</td>
+              <td *ngIf="purchase.cost">{{ purchase.cost | currency:'INR':'symbol':'1.1-1' }}</td>
+              <td *ngIf="purchase.paymentPeriod">{{ formatEnumForOutput(purchase.paymentPeriod) | titlecase }}</td>
+              <td *ngIf="(purchase.username && type!='history')">{{ purchase.username }}</td>
+              <td *ngIf="purchase.applicationState">{{ formatEnumForOutput(purchase.applicationState) | titlecase }}</td>
+              <td *ngIf="(purchase.assigned_underwriter && type=='all')">{{ purchase.assigned_underwriter }}</td>
+
+              <td *ngIf="type=='underwrite'" class="fixed-column">
                 <select #approvalStatus (change)="setPolicyApproval(purchase['id'], approvalStatus.value)">
                   <option value="">(select)</option>
                   <option value="yes">Yes</option>
@@ -30,4 +71,7 @@
             </tr>
       </tbody>
     </table>
+</div>
+<div *ngIf="data?.length==0" class="alert alert-info">
+  No purchase data found. Try selecting a different category.
 </div>

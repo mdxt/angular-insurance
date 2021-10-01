@@ -1,22 +1,28 @@
 <div *ngIf="requestPolicyList && id && cost; else errorTemplate">
-    <div *ngFor="let attribute of requestPolicyList | keyvalue">
-        {{ attribute.key }} - {{ attribute.value }}
-    </div>
-    ID- {{ id }}
-    Cost- {{ cost }}
+    <div class="container">
+        <div class="container justify-content-center col-sm-5 border p-3">
+            <h6 class="text-center">Purchase details</h6>
+            <table class="table table-sm">
+                <tr *ngFor="let attribute of requestPolicyList | keyvalue">
+                    <td>{{ formatEnumForOutput(''+attribute.key)}}</td>
+                    <td>{{ formatEnumForOutput(''+attribute.value) | titlecase}}</td>
+                </tr>
+            </table>
 
-    <form [formGroup]="additionalDetailsFormGroup" (ngSubmit)="submitPurchase()">
-        <div class="form-group">
-            <label for="address">Address:</label>
-            <input #address class="form-control" id="address" formControlName="address" type="text">
+            <form [formGroup]="additionalDetailsFormGroup" (ngSubmit)="submitPurchase()">
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input #address class="form-control" id="address" formControlName="address" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="buyerName">Buyer Name:</label>
+                    <input #address class="form-control" id="buyerName" formControlName="buyerName" type="text">
+                </div>
+                <button type="submit" [disabled]="this.additionalDetailsFormGroup.invalid" class="btn btn-primary form-control">Purchase</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="buyerName">Buyer Name:</label>
-            <input #address class="form-control" id="buyerName" formControlName="buyerName" type="text">
-        </div>
-        <button type="submit" [disabled]="this.additionalDetailsFormGroup.invalid" class="btn btn-primary">Purchase</button>
-    </form>
+    </div>
 </div>
 <ng-template #errorTemplate>
-    Please select a policy
+    <div class="alert alert-info m-3">Please submit your details and choose a policy to purchase</div>
 </ng-template>

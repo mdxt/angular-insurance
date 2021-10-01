@@ -13,6 +13,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { RequestPolicyComponent } from './components/request-policy/request-policy.component';
 import { CreatePurchaseComponent } from './components/create-purchase/create-purchase.component';
 import { OrderHistoryComponent } from './components/order-history/order-history.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { UsersComponent } from './components/users/users.component';
+import { CreatePolicyComponent } from './components/create-policy/create-policy.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { OrderHistoryComponent } from './components/order-history/order-history.
     PolicyDetailsComponent,
     RequestPolicyComponent,
     CreatePurchaseComponent,
-    OrderHistoryComponent
+    OrderHistoryComponent,
+    NavbarComponent,
+    UsersComponent,
+    CreatePolicyComponent
   ],
   imports: [
     BrowserModule,

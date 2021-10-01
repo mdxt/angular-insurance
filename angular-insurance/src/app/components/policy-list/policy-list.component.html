@@ -1,6 +1,8 @@
+
 <div *ngIf="policies?.length == 0">
-    No policies found
-    <div class="container my-3">
+    <div class="alert alert-info my-3">No policies found. Please revise the submitted parameters.</div>
+    
+    <!-- <div class="container my-3">
         <div class="row">
             <div class="container border rounded">
                 <div class="row row-eq-height">
@@ -56,9 +58,10 @@
                 <div class="font-weight-light w-50 d-inline-block" style="font-size:12px">Product feature</div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
+<div *ngIf="policies?.length > 0">
 <div *ngIf="policyType=='LIFE'">
     <div class="container rounded bg-dark text-white my-3">
         <div class="row row-eq-height">
@@ -68,6 +71,7 @@
             <div class="col-sm-3 p-0 my-1 border-right">
                 <div class="text-center" >Cover Value</div>
             </div>
+            
             <div class="col-sm-3 p-0 my-1 border-right">
                 <div class="text-center" >Cover Till Age</div>
             </div>
@@ -91,16 +95,14 @@
                             <div class="text-center" >{{ requestAge }} yrs<br><div class="font-weight-light" style="font-size:10px">Max Limit: {{ policy.maxCoverTillAge }}yrs</div></div>
                         </div>
                         <div class="col-sm-3 p-0 my-1">
-                            <div class="text-center"><button class="btn btn-primary w-50" (click)="showPolicyDetails(policy.id)">{{ policy.cost | currency:'INR':'symbol' }}</button></div>
+                            <div class="text-center"><button class="btn btn-primary w-50" (click)="showPolicyDetails(policy.id)">{{ policy.cost | currency:'INR':'symbol':'1.0-0' }}</button></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div *ngIf="policy.additionalFeatures" class="row">
                 <div class="mx-4 px-2 py-1 w-100 rounded-bottom bg-light">
-                    <div *ngFor="let feature of policy.additionalFeatures">
-                        <div class="font-weight-light w-50 d-inline-block" style="font-size:12px">{{ feature }}</div>
-                    </div>
+                    <div *ngFor="let feature of policy.additionalFeatures" class="d-inline-block w-50 font-weight-light" style="font-size:12px">{{ feature }}</div>
                 </div>
             </div>
         </div>
@@ -155,20 +157,20 @@
                             <div class="text-center" >{{ policy.deductible | currency:'INR':'symbol':'1.0-0' }}<br></div>
                         </div>
                         <div class="col-sm-2 p-0 my-1">
-                            <div class="text-center"><button class="btn btn-primary w-50" (click)="showPolicyDetails(policy.id)">{{ policy.cost | currency:'INR':'symbol' }}</button></div>
+                            <div class="text-center"><button class="btn btn-primary w-50" (click)="showPolicyDetails(policy.id)">{{ policy.cost | currency:'INR':'symbol':'1.0-0' }}</button></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div *ngIf="policy.additionalFeatures" class="row">
                 <div class="mx-4 px-2 py-1 w-100 rounded-bottom bg-light">
-                    <div *ngFor="let feature of policy.additionalFeatures">
-                        <div class="font-weight-light w-50 d-inline-block" style="font-size:12px">{{ feature }}</div>
-                    </div>
+                    <!-- <div *ngFor="let feature of policy.additionalFeatures"> -->
+                        <div *ngFor="let feature of policy.additionalFeatures" class="font-weight-light w-50 d-inline-block" style="font-size:12px">{{ feature }}</div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
 
     </div>
-
+</div>
 </div>
