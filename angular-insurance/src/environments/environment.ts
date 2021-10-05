@@ -4,7 +4,18 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  //apiUrl: 'http://localhost:8080/api',
+  //baseUrl: 'http://localhost:8080',
+  
+
+  // apiUrl: "http://" + process.env.SECURE_API_SERVICE_HOST + ":" + process.env.SECURE_API_SERVICE_PORT + "/api",
+  // baseUrl: "http://" + process.env.SECURE_API_SERVICE_HOST + ":" + process.env.SECURE_API_SERVICE_PORT,
+
+  apiUrl: "http://" + window["env"]["apiHost"] + ":" + window["env"]["apiPort"] + "/api",
+  baseUrl: "http://" + window["env"]["apiHost"] + ":" + window["env"]["apiPort"],
+
+  // apiUrl: 'http://secure-api:8080/api',
+  // baseUrl: 'http://secure-api:8080'
 };
 
 /*

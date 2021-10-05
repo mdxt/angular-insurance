@@ -1,9 +1,9 @@
 {
   "name": "angular-insurance",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "envsub": "^4.0.7",
     "jwt-decode": "^3.1.2",
     "ng2-pdf-viewer": "^5.2.3",
     "rxjs": "~6.4.0",

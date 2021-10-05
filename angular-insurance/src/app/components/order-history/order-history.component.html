@@ -6,7 +6,7 @@
       <a class="nav-link" data-toggle="pill" (click)="getPurchaseData('DENTAL')" href="#">Dental Insurance</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="pill" href="#">Menu 2</a>
+      <a class="nav-link" data-toggle="pill" (click)="getPurchaseData('DENTAL_AND_VISION')" href="#">Dental And Vision Insurance</a>
     </li>
 </ul>
 <div *ngIf="data?.length>0" class="d-flex justify-content-center">

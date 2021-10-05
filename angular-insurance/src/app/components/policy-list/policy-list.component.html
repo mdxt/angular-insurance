@@ -110,7 +110,7 @@
     </div>
 </div>
 
-<div *ngIf="policyType=='DENTAL'">
+<div *ngIf="policyType=='DENTAL' || policyType=='DENTAL_AND_VISION'">
     <div class="container rounded bg-dark text-white my-3">
         <div class="row row-eq-height">
             <div class="col-sm-2 p-0 my-1 border-right">
@@ -165,6 +165,7 @@
             <div *ngIf="policy.additionalFeatures" class="row">
                 <div class="mx-4 px-2 py-1 w-100 rounded-bottom bg-light">
                     <!-- <div *ngFor="let feature of policy.additionalFeatures"> -->
+                        <div *ngIf="policy.coversEyeglassFrames" class="font-weight-light w-50 d-inline-block" style="font-size:12px">Eyeglass frames covered</div>
                         <div *ngFor="let feature of policy.additionalFeatures" class="font-weight-light w-50 d-inline-block" style="font-size:12px">{{ feature }}</div>
                     <!-- </div> -->
                 </div>

@@ -75,7 +75,7 @@ export class RequestPolicyComponent implements OnInit {
       console.log('current policy type - '+this.currentPolicyType); 
     }
 
-    if(policyType == PolicyTypesEnum[PolicyTypesEnum.DENTAL]){
+    if(policyType == PolicyTypesEnum[PolicyTypesEnum.DENTAL] || policyType == PolicyTypesEnum[PolicyTypesEnum.DENTAL_AND_VISION]){
 
       this.requestPoliciesFormGroup.addControl('gender', new FormControl(this.genders[0], [Validators.required, FormValidators.valueFromEnumOnly(this.genders)]));
       this.requestPoliciesFormGroup.addControl('age', new FormControl(18, [Validators.required, Validators.min(18) ,Validators.max(99)]));

@@ -1,5 +1,5 @@
 
-<div *ngIf="policy" class="container">
+<div *ngIf="policy" class="container-fluid">
     <div class="h4 text-center">{{ policy.policy.name }}</div>
     <div class="h6 text-center">by {{ policy.policy.insurer }}</div>
     <div *ngIf="policy.cost > 0.0" class="text-center p-2">
@@ -13,6 +13,7 @@
     </div>
 
     <div class="row mb-3">
+
         <div class="col-md-3 table-responsive px-3">
             <table class="table table-sm">
                 <!-- <thead>
@@ -67,11 +68,15 @@
                             <td>Medical examination type</td>
                             <td>{{ policy.policy?.examinationType}}</td>
                         </tr>
+                        <tr *ngIf="policy.policy?.coversEyeglassFrames">
+                            <td>Eyeglass frames covered</td>
+                            <td>{{ policy.policy?.coversEyeglassFrames}}</td>
+                        </tr>
 
                         <tr *ngIf="policy.policy?.additionalFeatures">
                             <td>Additional features</td>
                             <td><ul class="list-group">
-                                   <li class="list-group-item" *ngFor="let additionalFeature of policy.policy.additionalFeatures">
+                                   <li class="list-group-item p-1" *ngFor="let additionalFeature of policy.policy.additionalFeatures">
                                     {{ additionalFeature }}<!-- {{ isLast? '' : ', ' }} -->
                                    </li>  
                                 </ul>
@@ -81,6 +86,8 @@
                 </tbody>
             </table>
         </div>
+
+
         <div class="col-md-9 border px-3" style="max-height: 75vh;overflow: scroll;">
             <pdf-viewer 
             [src]="apiUrl + policy.policy.documentPath" 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { PolicyService } from 'src/app/services/policy.service';
 import { environment } from 'src/environments/environment';
 
@@ -31,7 +32,12 @@ export class PolicyDetailsComponent implements OnInit {
     const policyId: number = +this.route.snapshot.paramMap.get('id');
     const policyType: string = this.route.snapshot.paramMap.get('type');
 
-    this.policyService.requestPolicyList.subscribe(
+    if(policyId == null || policyType == null) {
+      this.policy = null;
+      return;
+    }
+
+    this.policyService.requestPolicyList.pipe(take(1)).subscribe(
       request => { 
           //if(request == null) return;
           console.log('requestPolicyList - '+JSON.stringify(request));

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { User } from './common/user';
 import { AuthService } from './services/authservice.service';
 
@@ -18,6 +19,7 @@ export class AppComponent {
   constructor(private authService: AuthService,
               private router: Router){
     //this.authService.user.subscribe(user => this.user = user);
+    console.log('known API url is '+environment.apiUrl);
     this.router.events
     .subscribe(event => {
         if (event instanceof NavigationEnd) {

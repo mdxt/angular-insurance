@@ -7,10 +7,8 @@
         <table class="table table-striped table-responsive">
           <thead>
             <tr>
-              <th *ngFor="let dataKey of dataKeys">{{ dataKey | titlecase}}</th>
-              <th *ngIf="type=='underwrite'" class="fixed-column">Approve?</th>
-              <th>Email</th>
-              <th>Roles</th>
+              <th *ngIf="userData[0]">Email</th>
+              <th *ngIf="userData[0]">Roles</th>
               <th></th>
             </tr>
           </thead>

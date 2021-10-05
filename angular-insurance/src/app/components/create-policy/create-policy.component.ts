@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CoverValueEnum, ExaminationTypeEnum, PolicyTypesEnum } from 'src/app/common/request-policy-list';
@@ -27,7 +27,8 @@ export class CreatePolicyComponent implements OnInit {
 
   constructor(private userService: UserService, 
               private formBuilder: FormBuilder,
-              private router: Router) { }
+              private router: Router,
+              private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.uploadForm = this.formBuilder.group({
@@ -37,7 +38,7 @@ export class CreatePolicyComponent implements OnInit {
   }
 
   onFileSelect(event) {
-    this.fileSuccessfullyUploaded = false;
+    this.setFileSuccessfullyUploaded(false);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.uploadForm.get('profile').setValue(file);
@@ -52,10 +53,16 @@ export class CreatePolicyComponent implements OnInit {
     this.userService.doUpload(formData).subscribe(
       next => { 
         console.log(JSON.stringify(next));
-        this.fileSuccessfullyUploaded = true; 
+        this.setFileSuccessfullyUploaded(true);
       },
       error => alert('Error uploading file '+JSON.stringify(error.error)),
     )
+  }
+
+  setFileSuccessfullyUploaded(value: boolean){
+    this.fileSuccessfullyUploaded = value; 
+    console.log('fileSuccessfullyUploaded - '+this.fileSuccessfullyUploaded);
+    this.ref.detectChanges();
   }
 
   handlePolicyTypeChange(policyType: string){
@@ -70,11 +77,11 @@ export class CreatePolicyComponent implements OnInit {
 
       this.createPolicyFormGroup.addControl('additionalFeaturesCSV', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
       this.createPolicyFormGroup.addControl('minCoverValue', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(20000000)]));
-      this.createPolicyFormGroup.addControl('maxCoverValue', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(20000000)]));
-      this.createPolicyFormGroup.addControl('multiplierCoverValue', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(200)]));
+      this.createPolicyFormGroup.addControl('maxCoverValue', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(20000000), FormValidators.valueGreaterThan(this.createPolicyFormGroup.get('minCoverValue'))]));
+      this.createPolicyFormGroup.addControl('multiplierCoverValue', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
       this.createPolicyFormGroup.addControl('minCoverTillAge', new FormControl(18, [Validators.required, Validators.min(18), Validators.max(99)]));
-      this.createPolicyFormGroup.addControl('maxCoverTillAge', new FormControl(18, [Validators.required, Validators.min(18), Validators.max(99)]));
-      this.createPolicyFormGroup.addControl('multiplierCoverTillAge', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(200)]));
+      this.createPolicyFormGroup.addControl('maxCoverTillAge', new FormControl(18, [Validators.required, Validators.min(18), Validators.max(99), FormValidators.valueGreaterThan(this.createPolicyFormGroup.get('minCoverTillAge'))]));
+      this.createPolicyFormGroup.addControl('multiplierCoverTillAge', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
       this.createPolicyFormGroup.addControl('examinationType', new FormControl(this.examinationTypes[0], [Validators.required, FormValidators.valueFromEnumOnly(this.examinationTypes)]));
     }
     if(policyType == 'DENTAL'){
@@ -86,25 +93,55 @@ export class CreatePolicyComponent implements OnInit {
       this.createPolicyFormGroup.addControl('coverValuesCSV', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
       
       // private Double multiplierCoverValue;
-      this.createPolicyFormGroup.addControl('multiplierCoverValue', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(200)]));
+      this.createPolicyFormGroup.addControl('multiplierCoverValue', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
 
       // //age till which the policy applies
       // private Integer minCoverPeriod;
       // private Integer maxCoverPeriod;
       // private Double multiplierCoverPeriod;
       this.createPolicyFormGroup.addControl('minCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]));
-      this.createPolicyFormGroup.addControl('maxCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]));
-      this.createPolicyFormGroup.addControl('multiplierCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(200)]));
+      this.createPolicyFormGroup.addControl('maxCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10), FormValidators.valueGreaterThanOrEqualTo(this.createPolicyFormGroup.get('minCoverPeriod'))]));
+      this.createPolicyFormGroup.addControl('multiplierCoverPeriod', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
 
       // private Integer minNumberCovered;
       // private Integer maxNumberCovered;
       // private Double multiplierNumberCovered;
       this.createPolicyFormGroup.addControl('minNumberCovered', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(4)]));
-      this.createPolicyFormGroup.addControl('maxNumberCovered', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(4)]));
-      this.createPolicyFormGroup.addControl('multiplierNumberCovered', new FormControl(1));
+      this.createPolicyFormGroup.addControl('maxNumberCovered', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(4), FormValidators.valueGreaterThanOrEqualTo(this.createPolicyFormGroup.get('minNumberCovered'))]));
+      this.createPolicyFormGroup.addControl('multiplierNumberCovered', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
       
       // private Long deductible;
       this.createPolicyFormGroup.addControl('deductible', new FormControl(1, [Validators.required, Validators.min(0), Validators.max(500000)]));
+    }
+    if(policyType == 'DENTAL_AND_VISION'){
+      this.createPolicyFormGroup.addControl('insurer', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
+      this.createPolicyFormGroup.addControl('name', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
+      this.createPolicyFormGroup.addControl('documentPath', new FormControl(this.currentFileName, [Validators.required, FormValidators.notOnlyWhitespace]));
+      this.createPolicyFormGroup.addControl('additionalFeaturesCSV', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
+
+      this.createPolicyFormGroup.addControl('coverValuesCSV', new FormControl('', [Validators.required, FormValidators.notOnlyWhitespace]));
+      
+      // private Double multiplierCoverValue;
+      this.createPolicyFormGroup.addControl('multiplierCoverValue', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
+
+      // //age till which the policy applies
+      // private Integer minCoverPeriod;
+      // private Integer maxCoverPeriod;
+      // private Double multiplierCoverPeriod;
+      this.createPolicyFormGroup.addControl('minCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]));
+      this.createPolicyFormGroup.addControl('maxCoverPeriod', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10), FormValidators.valueGreaterThanOrEqualTo(this.createPolicyFormGroup.get('minCoverPeriod'))]));
+      this.createPolicyFormGroup.addControl('multiplierCoverPeriod', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
+
+      // private Integer minNumberCovered;
+      // private Integer maxNumberCovered;
+      // private Double multiplierNumberCovered;
+      this.createPolicyFormGroup.addControl('minNumberCovered', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(4)]));
+      this.createPolicyFormGroup.addControl('maxNumberCovered', new FormControl(1, [Validators.required, Validators.min(1), Validators.max(4), FormValidators.valueGreaterThanOrEqualTo(this.createPolicyFormGroup.get('minNumberCovered'))]));
+      this.createPolicyFormGroup.addControl('multiplierNumberCovered', new FormControl(0.01, [Validators.required, Validators.min(0.01), Validators.max(200)]));
+      
+      // private Long deductible;
+      this.createPolicyFormGroup.addControl('deductible', new FormControl(1, [Validators.required, Validators.min(0), Validators.max(500000)]));
+      this.createPolicyFormGroup.addControl('coversOrthodontia', new FormControl(false, [Validators.required]));
     }
     
     this.createPolicyType = policyType;

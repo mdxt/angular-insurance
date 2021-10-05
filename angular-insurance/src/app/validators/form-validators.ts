@@ -32,4 +32,14 @@ export class FormValidators {
         };
     }
    
+    static valueGreaterThanOrEqualTo(lowerValueControl: AbstractControl) : ValidatorFn {
+        return (control: AbstractControl): { [key: string]: boolean } | null => {
+            console.log('inside valueGreaterThan - '+control.value+', '+lowerValueControl.value);
+            if(control.value != undefined && lowerValueControl.value != undefined && control.value < lowerValueControl.value){
+                console.log('invalid value of control ');
+                return { 'lowValue' : true}
+            }
+            return null;
+        };
+    }
 }

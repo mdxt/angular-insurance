@@ -38,7 +38,7 @@ export class PolicyListComponent implements OnInit {
             if(this.policyType == 'LIFE'){
               this.requestAge = next['coverTillAge'];
             }
-            if(this.policyType == 'DENTAL'){
+            if(this.policyType == 'DENTAL' || this.policyType == 'DENTAL_AND_VISION'){
               this.requestAge = next['coverPeriod'];
               this.requestNumberCovered = next['numberCovered'];
             }

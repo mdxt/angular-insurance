@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private static baseUrl: string = 'http://localhost:8080';
+  private static baseUrl: string = environment.baseUrl;//'http://localhost:8080';
 
   user: Subject<User> = new BehaviorSubject<User>(null);
 

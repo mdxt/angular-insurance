@@ -76,7 +76,7 @@ export class OrderHistoryComponent implements OnInit {
     
     if(status!='yes' && status!='no') return;
     
-    this.policyService.setPolicyApproval(this.policyType, (status == 'yes') ? true : false, +id).subscribe(
+    this.policyService.setPolicyApproval(this.policyType, (status == 'yes') ? true : false, +id).pipe(take(1)).subscribe(
       next => { 
         console.log(JSON.stringify(next)); 
         alert(JSON.stringify(next));

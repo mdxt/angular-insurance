@@ -75,7 +75,10 @@ export class LoginComponent implements OnInit {
                   alert('Login unsuccessful. Please check username and password');
                 }
               },
-            
+              error => {
+                alert('Error while attempting login');
+                console.log('Error while attempting login - '+JSON.stringify(error));
+              }
           );
     }
   }
@@ -92,8 +95,8 @@ export class LoginComponent implements OnInit {
                         this.login();
                       }, 
                       error => {
-                        alert('Error while attempting login');
-                        console.log('Error while attempting login - '+JSON.stringify(error));
+                        alert('Error while attempting sign up');
+                        console.log('Error while attempting sign up - '+JSON.stringify(error));
                       });
   }
 
